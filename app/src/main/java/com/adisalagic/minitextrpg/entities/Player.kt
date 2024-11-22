@@ -1,8 +1,10 @@
 package com.adisalagic.minitextrpg.entities
 
 class Player {
+    var isDefending = false
     var weapon: Weapon = HeroSword()
     val health: Health = Health(5000)
+    val armor: Long = 100
     private val inventory = mutableListOf<Item>()
     val playerInventory get() = inventory
 
@@ -21,4 +23,7 @@ class Player {
     fun dropItem(item: Item) {
         inventory.remove(item)
     }
+
+    fun defend() {isDefending = true}
+    fun stopDefending() { isDefending = false}
 }

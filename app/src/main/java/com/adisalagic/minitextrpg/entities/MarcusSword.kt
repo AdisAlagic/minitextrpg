@@ -2,13 +2,11 @@ package com.adisalagic.minitextrpg.entities
 
 class MarcusSword : Weapon() {
     override val damage: Damage
-        get() = Damage(250)
+        get() = Damage(500)
 
-    override fun getName(): String {
-        return "Меч Маркуса"
-    }
+    override val name: String
+        get() = "Меч Маркуса"
 
-    override fun getDescription(): String {
-        return "Когда-то служившему бравому войну меч теперь является напоминанием того, во что превратился мир"
-    }
+    override val description: String
+        get() = "Когда-то служившему бравому войну меч теперь является напоминанием того, во что превратился мир"
 }

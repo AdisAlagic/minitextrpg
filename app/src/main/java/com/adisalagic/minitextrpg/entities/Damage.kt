@@ -4,13 +4,14 @@ import com.adisalagic.minitextrpg.minus
 import com.adisalagic.minitextrpg.percent
 import kotlin.random.Random
 
-class Damage(private val minDamage: Long, private val maxDamage: Long, private val random: Random = Random) {
+class Damage(val minDamage: Long, val maxDamage: Long, private val random: Random = Random) {
 
     constructor(maxDamage: Long, random: Random = Random) : this(maxDamage - 10.percent, maxDamage, random)
 
     fun rollDamage(): Long {
         return random.nextLong(minDamage, maxDamage + 1)
     }
+
 
 
 }

@@ -4,5 +4,6 @@ typealias ConsumableEffect = Pair<Long, Health.Action>
 
 abstract class Consumable : Item {
     abstract fun consume(): ConsumableEffect
-    override fun getType(): ItemType = ItemType.CONSUMABLE
+    override val type: ItemType
+        get() = ItemType.CONSUMABLE
 }

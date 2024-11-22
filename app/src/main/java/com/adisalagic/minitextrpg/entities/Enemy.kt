@@ -1,13 +1,20 @@
 package com.adisalagic.minitextrpg.entities
 
-interface Enemy {
-    fun getName(): String
-    fun getCurrentWeapon(): Weapon
-    fun getCurrentHealth(): Health
-    fun getCurrentArmor(): Long
+abstract class Enemy {
+    abstract val name: String
+    abstract val currentWeapon: Weapon
+    val currentHealth: Health = Health(10000)
+    abstract val currentArmor: Long
+    abstract val inventory: MutableList<Item>
+    abstract fun rollTurn(): EnemyTurn
+    abstract fun defend()
+    abstract fun stopDefend()
+    abstract fun claim(): Enemy
 
-    val name get() = getName()
-    val currentWeapon get() = getCurrentWeapon()
-    val currentHealth get() = getCurrentHealth()
-    val currentArmor get() = getCurrentArmor()
+    enum class EnemyTurn {
+        ATTACK,
+        DEFEND,
+        NONE,
+        USE_ITEM
+    }
 }

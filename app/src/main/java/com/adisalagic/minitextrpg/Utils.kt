@@ -1,11 +1,14 @@
 package com.adisalagic.minitextrpg
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.adisalagic.minitextrpg.entities.Item
+import com.adisalagic.minitextrpg.entities.Option
+import com.adisalagic.minitextrpg.locations.Options
 import com.adisalagic.minitextrpg.viewmodels.MainViewModel
 import java.time.temporal.TemporalAmount
 import kotlin.random.Random
@@ -46,6 +49,12 @@ operator fun Long.plus(percentage: Percentage): Long {
     return this + (this / 100 * percentage.percentage)
 }
 
+operator fun Long.compareTo(percent: Percentage): Int {
+    val calc = this / 100 * percent.percentage
+    return this.compareTo(calc)
+}
+
+
 data class ItemDropResult(
     val item: Item,
     val amount: Int
@@ -54,15 +63,17 @@ data class ItemDropResult(
 data class ItemDrop(
     val item: Item,
     val chance: Double,
-    val maxAmount: Int = 2,
+    val maxAmount: Int = 1,
     val minAmount: Int = 1,
     val random: Random = Random
 ) {
     fun drop(): ItemDropResult? {
-        return if (random.nextDouble(100.1) > chance) ItemDropResult(
+        val chanced = random.nextDouble(0.0,100.1)
+        Log.d("Chance","Drop chance: $chanced < $chance = ${chanced < chance}")
+        return if (chanced < chance) ItemDropResult(
             item,
             random.nextInt(
-                minAmount, maxAmount
+                minAmount, maxAmount + 1
             )
         ) else
             null
@@ -73,8 +84,20 @@ data class ItemDrop(
     }
 }
 
-fun <T> MutableList<T>.takeRandom(random: Random = Random): T {
-    return removeAt(random.nextInt(0, size))
+fun <T> MutableList<T>.takeRandom(random: Random = Random): T? {
+    return if (isEmpty()) null else removeAt(random.nextInt(0, size))
+}
+
+fun Option(optionEnum: Options, action: String, onOptionClick: (Option) -> Unit): Option {
+    return Option(optionEnum.ordinal, action, onOptionClick)
+}
+
+fun String.append(text: String): String {
+    return this + text
+}
+
+fun String.appendLine(text: String): String {
+    return this.append("\n$text")
 }
 
 lateinit var mainViewModel: MainViewModel

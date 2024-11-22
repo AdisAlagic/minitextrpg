@@ -2,6 +2,7 @@ package com.adisalagic.minitextrpg.locations
 
 import com.adisalagic.minitextrpg.ItemDrop
 import com.adisalagic.minitextrpg.ItemDropResult
+import com.adisalagic.minitextrpg.Option
 import com.adisalagic.minitextrpg.entities.FakeHeroSword
 import com.adisalagic.minitextrpg.entities.HealthPotion
 import com.adisalagic.minitextrpg.entities.Option
@@ -13,7 +14,8 @@ class Garden(
     override var onOptionClicked: (Option) -> Unit = {},
 ) : Location {
     private val itemsToDrop = mutableListOf(
-        ItemDrop(FakeHeroSword(), 0.0), ItemDrop(HealthPotion(), 70.0, 2)
+        ItemDrop(FakeHeroSword(), 0.0),
+        ItemDrop(HealthPotion(), 70.0, 2)
     )
     override val name: String
         get() = "Сад"
@@ -22,15 +24,19 @@ class Garden(
                 "что вам не получиться здесь остаться подольше"
     override val options: List<Option>
         get() = listOf(
-            Option("Вперед") { onOptionClicked(it) },
-            Option("Осмотреться") { onOptionClicked(it) }
+            Option(Options.AHEAD, "Вперед") { onOptionClicked(it) },
+            Option(Options.LOOK_AROUND, "Осмотреться") { onOptionClicked(it) }
         )
 
     override val drops: List<ItemDrop>
         get() = itemsToDrop
 
     override fun dropItem(): ItemDropResult? {
-        return itemsToDrop.takeRandom().drop()
+        if (itemsToDrop.isEmpty()) return null
+        val item = itemsToDrop.takeRandom()
+        val drop = item?.drop()
+        if (drop == null) itemsToDrop.add(item!!)
+        return drop
     }
 
 
